@@ -17,69 +17,15 @@ import java.awt.*;
  * 注意：本次实验要求不能直接使用系统提供的画线和画圆函数，可以调用其他的画图函数。
  */
 public class MyJPanel extends JPanel {
+
+
     @Override
     public void paint(Graphics g) {
         super.paint(g);
         g.setColor(Color.BLACK);
-        drawLineByDDA(10,20,320,230,g);
+        GraphicsUtil.drawLineByDDA(10, 20, 320, 230, g);
         g.drawLine(10,20,320,230);
-        drawLineByMidPoint(10,20,320,230,g);
+        GraphicsUtil.drawLineByMidPoint(10, 20, 320, 230, g);
+        GraphicsUtil.drawLineByBresenham(10, 20, 320, 230, g);
     }
-
-    void drawPoint(int x,int y,Graphics g){
-        g.drawLine(x,y,x+1,y);
-    }
-
-    void drawLineByDDA(int x1,int y1,int x2,int y2,Graphics g){
-
-        int length = 0;
-        double dy = 0;
-        double dx = 0;
-        double x = x1;
-        double y = y1;
-        int k = 0;
-        length = Math.max(Math.abs(x2-x1),Math.abs(y2-y1));
-        dx = (double)(x2-x1)/length;
-        dy = (double) (y2-y1)/length;
-        System.out.println(dx+"  "+dy);
-        while (k < length){
-            drawPoint((int)x,(int)y,g);
-            x = x + dx ;
-            y = y + dy;
-            k++;
-            System.out.println(x+"===="+y);
-        }
-
-    }
-
-    void drawLineByMidPoint(int x1,int y1,int x2,int y2,Graphics g){
-        int x,y,a,b,d,d1,d2;
-        a = y1-y2;
-        b = x2-x1;
-        x = x1;
-        y = y1;
-        d = 2*a+b;
-        d1 = 2*a;
-        d2 = 2*(a+b);
-
-        drawPoint(x,y,g);
-
-        for(x=x1;x<=x2;x++){
-
-            if(d<0){
-                y++;
-                d+=d2;
-            }else{
-                d+=d1;
-            }
-
-            drawPoint(x,y,g);
-        }
-    }
-
-    void drawLineByBresenham(int x1,int y1,int x2,int y2,Graphics g){
-
-    }
-
-
 }
