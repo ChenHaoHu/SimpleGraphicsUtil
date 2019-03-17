@@ -18,6 +18,7 @@ public class Main {
         int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         JPanel jPanel = new MyJPanel();
+        jPanel.setBackground(Color.WHITE);
         frame.add(jPanel);
         frame.setLocation(x, y);
         frame.setVisible(true);

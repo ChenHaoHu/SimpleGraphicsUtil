@@ -1,18 +1,122 @@
 package ExperimentOne;
 
+
 import java.awt.*;
 
 /**
  * @Auther: 简单DI年华
  * @Date: 19-3-17 17:13
  * @Description:
+ *
+ *
+ * todo: 画圆时，采用移动坐标原点的办法失败，猜想是画图采用多线程
+ *
+ *
+ *
  */
 public class GraphicsUtil {
 
+
+
+    /**
+     * 使用中点画圆法
+     * https://blog.csdn.net/zl908760230/article/details/53954746
+     * @param x
+     * @param y
+     * @param r
+     * @param g
+     */
+    public static synchronized void drawCircleByMidPoint(int x,int y,int r,Graphics g){
+        int x0 = x;
+        int y0 = y;
+        x = 0;
+        y = r;
+        int d = 1 - r;
+        drawEightPoint(x,y,x0,y0,g);
+        while (x <= y) {
+            if (d < 0) {
+                d += 2 * x + 3;
+                x++;
+            }
+            else {
+                d += 2 * (x - y) + 5;
+                x++;
+                y--;
+            }
+            drawEightPoint(x,y,x0,y0,g);
+        }
+
+    }
+
+    /**
+     * https://blog.csdn.net/sinat_41104353/article/details/82961824
+     * Bresenham 算法画圆
+     * @param x
+     * @param y
+     * @param R
+     * @param g
+     */
+    public static  void drawCircleByBresenham(int x,int y,int R,Graphics g){
+
+        int p;
+        p=3-2*R;
+        int x0 = x;
+        int y0 = y;
+        x = 0;
+        y = R;
+        for(;x<=y;x++){
+            drawEightPoint(x,y,x0,y0,g);
+            if(p>=0){
+                p+=4*(x-y)+10;
+                y--;
+            }
+            else {
+                p+=4*x+6;
+            }
+        }
+        g.translate(0,0);
+    }
+
+    /**
+     * 画八个对称的点
+     * https://img-blog.csdnimg.cn/20190107225414814.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3NpbmF0XzQxMTA0MzUz,size_16,color_FFFFFF,t_70
+     * @param x
+     * @param y
+     * @param g
+     */
+    public static void drawEightPoint(int x,int y,int x0, int y0,Graphics g){
+
+        drawPoint(x0 + x, y0 + y, g);
+        drawPoint(x0 - x, y0 + y, g);
+        drawPoint(x0 + x, y0 - y, g);
+        drawPoint(x0 - x, y0 - y, g);
+
+        drawPoint(x0 + y, y0 + x, g);
+        drawPoint(x0 - y, y0 + x, g);
+        drawPoint(x0 + y, y0 - x, g);
+        drawPoint(x0 - y, y0 - x, g);
+
+    }
+
+    /**
+     * 画点
+     * @param x
+     * @param y
+     * @param g
+     */
     public static void drawPoint(int x, int y, Graphics g) {
         g.drawLine(x, y, x + 1, y);
     }
 
+
+    /**
+     * DDA算法画线
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param g
+     */
     public static  void drawLineByDDA(int x1, int y1, int x2, int y2, Graphics g) {
 
         int length = 0;
@@ -35,6 +139,15 @@ public class GraphicsUtil {
 
     }
 
+
+    /**
+     * 中点算法画线
+     * @param x1
+     * @param y1
+     * @param x2
+     * @param y2
+     * @param g
+     */
     public static void drawLineByMidPoint(int x1, int y1, int x2, int y2, Graphics g) {
         int x, y, a, b, d, d1, d2;
         a = y1 - y2;
@@ -62,7 +175,7 @@ public class GraphicsUtil {
 
     /**
      * 参考 https://blog.csdn.net/cjw_soledad/article/details/78886117
-     *
+     *Bresenham算法
      * @param x1
      * @param y1
      * @param x2
@@ -98,4 +211,6 @@ public class GraphicsUtil {
         }
 
     }
+
+
 }
