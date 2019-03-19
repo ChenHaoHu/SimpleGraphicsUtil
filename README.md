@@ -19,7 +19,7 @@
 
 
 
-![](D:\GITHUB项目\ComputerGraphics\show.gif)
+![](https://github.com/ChenHaoHu/SimpleGraphicsUtil/blob/master/show.gif)
 
 
 
