@@ -1,7 +1,9 @@
 package ExperimentOne;
 
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.Stack;
 
 /**
  * @Auther: 简单DI年华
@@ -17,6 +19,72 @@ import java.awt.*;
 public class GraphicsUtil {
 
 
+    public static void fillArcBySeedFour(int x, int y, Color newColor, Graphics g, JComponent component) throws AWTException {
+
+
+        //Todo: 需要解耦
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        int x0 = (int)(toolkit.getScreenSize().getWidth()-400)/2+9;
+        int y0 = (int)(toolkit.getScreenSize().getHeight()-300)/2+31;
+
+        Robot robot = new Robot();
+        x = x + x0 ;
+        y = y + y0 ;
+        g.setColor(newColor);
+        Stack<Point> stack = new Stack<>();
+        stack.push(new Point(x,y));
+        drawPoint(x-x0,y-y0,g);
+
+        boolean flag = true;
+
+        while (!stack.empty() || flag == true){
+
+            if (stack.empty() && flag == true){
+                x0--;
+                flag = !flag;
+                stack.push(new Point(x-1,y));
+            }
+
+
+
+            Point pop = stack.pop();
+            x = (int) pop.getX();
+            y = (int) pop.getY();
+
+
+
+            if (!robot.getPixelColor(x,y+1).equals(newColor) && !robot.getPixelColor(x,y+1).equals(Color.BLACK)){
+                stack.push(new Point(x,y+1));
+                drawPoint(x-x0,y-y0+1,g);
+                System.out.println(1);
+            }
+
+
+            if (!robot.getPixelColor(x+1,y).equals(newColor) && !robot.getPixelColor(x+1,y).equals(Color.BLACK)){
+                stack.push(new Point(x+1,y));
+                drawPoint(x-x0+1,y-y0,g);
+                System.out.println(2);
+            }
+
+
+            if (!robot.getPixelColor(x,y-1).equals(newColor) && !robot.getPixelColor(x,y-1).equals(Color.BLACK)){
+                stack.push(new Point(x,y-1));
+                drawPoint(x-x0,y-y0-1,g);
+                System.out.println(3);
+            }
+
+            if (!robot.getPixelColor(x-1,y).equals(newColor) && !robot.getPixelColor(x-1,y).equals(Color.BLACK)){
+                stack.push(new Point(x-1,y));
+                drawPoint(x-x0-1,y-y0,g);
+                System.out.println(4);
+            }
+
+
+
+        }
+
+        System.out.println("out");
+    }
 
     /**
      * 使用中点画圆法
@@ -26,7 +94,7 @@ public class GraphicsUtil {
      * @param r
      * @param g
      */
-    public static synchronized void drawCircleByMidPoint(int x,int y,int r,Graphics g){
+    public static void drawCircleByMidPoint(int x,int y,int r,Graphics g){
         int x0 = x;
         int y0 = y;
         x = 0;
@@ -56,7 +124,7 @@ public class GraphicsUtil {
      * @param R
      * @param g
      */
-    public static  void drawCircleByBresenham(int x,int y,int R,Graphics g){
+    public static void drawCircleByBresenham(int x,int y,int R,Graphics g){
 
         int p;
         p=3-2*R;
@@ -74,7 +142,6 @@ public class GraphicsUtil {
                 p+=4*x+6;
             }
         }
-        g.translate(0,0);
     }
 
     /**
@@ -128,13 +195,11 @@ public class GraphicsUtil {
         length = Math.max(Math.abs(x2 - x1), Math.abs(y2 - y1));
         dx = (double) (x2 - x1) / length;
         dy = (double) (y2 - y1) / length;
-//        System.out.println(dx + "  " + dy);
         while (k < length) {
             drawPoint((int) x, (int) y, g);
             x = x + dx;
             y = y + dy;
             k++;
-//            System.out.println(x + "====" + y);
         }
 
     }

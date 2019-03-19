@@ -1,9 +1,18 @@
 package ExperimentOne;
 
+import javax.imageio.ImageIO;
+import javax.imageio.ImageTypeSpecifier;
+import javax.imageio.stream.ImageOutputStream;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.Stack;
 
 /**
  * @Auther: 简单DI年华
@@ -20,8 +29,6 @@ import java.awt.event.MouseEvent;
  */
 public class MyJPanel extends JPanel {
 
-
-
     public MyJPanel() {
 
 
@@ -31,17 +38,26 @@ public class MyJPanel extends JPanel {
     public void paint(Graphics g) {
         super.paint(g);
 
-        test1(g);
+        try {
+            test1(g);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
-    public void test1(Graphics g)  {
+    public void test1(Graphics g) throws AWTException, IOException {
 
         g.setColor(Color.BLACK);
 
-        //这里画出一些你喜欢的图形
+        GraphicsUtil.drawCircleByBresenham(200,100,10,g);
+
 
     }
 
+
+    public void up(Graphics g) throws AWTException {
+        GraphicsUtil.fillArcBySeedFour(203,102,Color.red,g,this);
+    }
 
 }
