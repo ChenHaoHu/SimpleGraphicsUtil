@@ -19,13 +19,22 @@ import java.util.Stack;
 public class GraphicsUtil {
 
 
-    public static void fillArcBySeedFour(int x, int y, Color newColor, Graphics g, JComponent component) throws AWTException {
+    /**
+     *四连通种子填充代码
+     * @param x
+     * @param y
+     * @param newColor
+     * @param bordColor
+     * @param g
+     * @param frame
+     * @throws AWTException
+     */
+    public static void fillArcBySeedFour(int x, int y, Color newColor, Color bordColor, Graphics g, JFrame frame) throws AWTException {
 
 
-        //Todo: 需要解耦
-        Toolkit toolkit = Toolkit.getDefaultToolkit();
-        int x0 = (int)(toolkit.getScreenSize().getWidth()-400)/2+9;
-        int y0 = (int)(toolkit.getScreenSize().getHeight()-300)/2+31;
+        // 9 和 31 是边框引起的
+        int x0 = frame.getX()+9;
+        int y0 = frame.getY()+31;
 
         Robot robot = new Robot();
         x = x + x0 ;
@@ -33,12 +42,15 @@ public class GraphicsUtil {
         g.setColor(newColor);
         Stack<Point> stack = new Stack<>();
         stack.push(new Point(x,y));
+
         drawPoint(x-x0,y-y0,g);
 
         boolean flag = true;
 
         while (!stack.empty() || flag == true){
 
+
+            //为了让他画两边，如果没有只会画一边，可能原因是因为我画点是用了 【 g.drawLine(x, y, x + 1, y);】存在进一的问题
             if (stack.empty() && flag == true){
                 x0--;
                 flag = !flag;
@@ -46,44 +58,33 @@ public class GraphicsUtil {
             }
 
 
-
             Point pop = stack.pop();
             x = (int) pop.getX();
             y = (int) pop.getY();
 
-
-
-            if (!robot.getPixelColor(x,y+1).equals(newColor) && !robot.getPixelColor(x,y+1).equals(Color.BLACK)){
+            if (!robot.getPixelColor(x,y+1).equals(newColor) && !robot.getPixelColor(x,y+1).equals(bordColor)){
                 stack.push(new Point(x,y+1));
                 drawPoint(x-x0,y-y0+1,g);
-                System.out.println(1);
             }
 
 
-            if (!robot.getPixelColor(x+1,y).equals(newColor) && !robot.getPixelColor(x+1,y).equals(Color.BLACK)){
+            if (!robot.getPixelColor(x+1,y).equals(newColor) && !robot.getPixelColor(x+1,y).equals(bordColor)){
                 stack.push(new Point(x+1,y));
                 drawPoint(x-x0+1,y-y0,g);
-                System.out.println(2);
             }
 
 
-            if (!robot.getPixelColor(x,y-1).equals(newColor) && !robot.getPixelColor(x,y-1).equals(Color.BLACK)){
+            if (!robot.getPixelColor(x,y-1).equals(newColor) && !robot.getPixelColor(x,y-1).equals(bordColor)){
                 stack.push(new Point(x,y-1));
                 drawPoint(x-x0,y-y0-1,g);
-                System.out.println(3);
             }
 
-            if (!robot.getPixelColor(x-1,y).equals(newColor) && !robot.getPixelColor(x-1,y).equals(Color.BLACK)){
+            if (!robot.getPixelColor(x-1,y).equals(newColor) && !robot.getPixelColor(x-1,y).equals(bordColor)){
                 stack.push(new Point(x-1,y));
                 drawPoint(x-x0-1,y-y0,g);
-                System.out.println(4);
             }
-
-
-
         }
 
-        System.out.println("out");
     }
 
     /**
@@ -173,6 +174,13 @@ public class GraphicsUtil {
      */
     public static void drawPoint(int x, int y, Graphics g) {
         g.drawLine(x, y, x + 1, y);
+        try {
+
+            //这里可以自定义延时
+//            Thread.sleep(50);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
