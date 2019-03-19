@@ -10,18 +10,25 @@ import java.awt.*;
  *
  */
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException, AWTException {
         JFrame frame = new JFrame("画图板");
+        frame.setBackground(Color.WHITE);
         frame.setSize(400,300);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         int x = (int)(toolkit.getScreenSize().getWidth()-frame.getWidth())/2;
         int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel jPanel = new MyJPanel();
+        MyJPanel jPanel = new MyJPanel();
+
+
         jPanel.setBackground(Color.WHITE);
         frame.add(jPanel);
         frame.setLocation(x, y);
         frame.setVisible(true);
+
+        Thread.sleep(1000);
+
+        jPanel.up(jPanel.getGraphics());
     }
 
 
