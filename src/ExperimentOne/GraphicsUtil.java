@@ -3,6 +3,7 @@ package ExperimentOne;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.Stack;
 
 /**
@@ -18,7 +19,6 @@ import java.util.Stack;
  */
 public class GraphicsUtil {
 
-
     /**
      *四连通种子填充代码
      * @param x
@@ -30,7 +30,6 @@ public class GraphicsUtil {
      * @throws AWTException
      */
     public static void fillArcBySeedFour(int x, int y, Color newColor, Color bordColor, Graphics g, JFrame frame) throws AWTException {
-
 
         // 9 和 31 是边框引起的
         int x0 = frame.getX()+9;
@@ -45,10 +44,18 @@ public class GraphicsUtil {
 
         drawPoint(x-x0,y-y0,g);
 
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
+        BufferedImage screenCapture = null;
+
+
+
+
         boolean flag = true;
 
-        while (!stack.empty() || flag == true){
+        screenCapture  = robot.createScreenCapture(new Rectangle(0, 0, toolkit.getScreenSize().width, toolkit.getScreenSize().height));
 
+
+        while (!stack.empty() || flag == true){
 
             //为了让他画两边，如果没有只会画一边，可能原因是因为我画点是用了 【 g.drawLine(x, y, x + 1, y);】存在进一的问题
             if (stack.empty() && flag == true){
@@ -62,27 +69,36 @@ public class GraphicsUtil {
             x = (int) pop.getX();
             y = (int) pop.getY();
 
-            if (!robot.getPixelColor(x,y+1).equals(newColor) && !robot.getPixelColor(x,y+1).equals(bordColor)){
+            screenCapture.getRGB(x, y);
+
+            if (screenCapture.getRGB(x,y+1) != newColor.getRGB() && screenCapture.getRGB(x,y+1) != bordColor.getRGB()){
                 stack.push(new Point(x,y+1));
                 drawPoint(x-x0,y-y0+1,g);
+                screenCapture.setRGB(x,y+1,newColor.getRGB());
             }
 
 
-            if (!robot.getPixelColor(x+1,y).equals(newColor) && !robot.getPixelColor(x+1,y).equals(bordColor)){
+            if (screenCapture.getRGB(x+1,y) != newColor.getRGB() && screenCapture.getRGB(x+1,y) != bordColor.getRGB()){
                 stack.push(new Point(x+1,y));
                 drawPoint(x-x0+1,y-y0,g);
+                screenCapture.setRGB(x+1,y,newColor.getRGB());
             }
 
 
-            if (!robot.getPixelColor(x,y-1).equals(newColor) && !robot.getPixelColor(x,y-1).equals(bordColor)){
+            if (screenCapture.getRGB(x,y-1) != newColor.getRGB() && screenCapture.getRGB(x,y-1) != bordColor.getRGB()){
                 stack.push(new Point(x,y-1));
                 drawPoint(x-x0,y-y0-1,g);
+                screenCapture.setRGB(x,y-1,newColor.getRGB());
             }
 
-            if (!robot.getPixelColor(x-1,y).equals(newColor) && !robot.getPixelColor(x-1,y).equals(bordColor)){
+            if (screenCapture.getRGB(x-1,y) != newColor.getRGB() && screenCapture.getRGB(x-1,y) != bordColor.getRGB()){
                 stack.push(new Point(x-1,y));
                 drawPoint(x-x0-1,y-y0,g);
+                screenCapture.setRGB(x-1,y,newColor.getRGB());
             }
+
+
+
         }
 
     }
@@ -177,7 +193,7 @@ public class GraphicsUtil {
         try {
 
             //这里可以自定义延时
-//            Thread.sleep(50);
+
         } catch (Exception e) {
             e.printStackTrace();
         }

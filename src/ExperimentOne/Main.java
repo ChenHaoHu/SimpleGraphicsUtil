@@ -21,7 +21,7 @@ public class Main {
         int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MyJPanel jPanel = new MyJPanel(frame);
-        jPanel.setBackground(Color.YELLOW);
+        jPanel.setBackground(new Color(195,2,28));
         frame.add(jPanel);
         frame.setLocation(x, y);
         frame.setVisible(true);

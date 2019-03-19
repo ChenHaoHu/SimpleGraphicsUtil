@@ -50,7 +50,7 @@ public class MyJPanel extends JPanel {
         int loc_y = 200;
 
 
-     g.setColor(Color.WHITE);
+        g.setColor(Color.WHITE);
         GraphicsUtil.drawCircleByBresenham(loc_x,loc_y+r_hread*3+40,r_hread*3,g);
 
         //画头
@@ -134,10 +134,10 @@ public class MyJPanel extends JPanel {
                 }
             }
         });
-
         countDownLatch.await();
+        g.setColor(Color.GRAY);
 
-        System.out.println("Ss");
+
 //        GraphicsUtil.drawLineByBresenham(loc_x-r_hread/3,loc_y+r_hread,loc_x-r_hread,loc_y+r_hread*2,g);
 //        GraphicsUtil.drawLineByBresenham(loc_x+r_hread/3,loc_y+r_hread,loc_x+r_hread,loc_y+r_hread*2,g);
 
