@@ -15,7 +15,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         JFrame frame = new JFrame("画图板");
         frame.setBackground(Color.WHITE);
-        frame.setSize(1000,600);
+        frame.setSize(1000,550);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         int x = (int)(toolkit.getScreenSize().getWidth()-frame.getWidth())/2;
         int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
@@ -26,8 +26,7 @@ public class Main {
         frame.setLocation(x, y);
         frame.setVisible(true);
         Thread.sleep(1000);
-        jPanel.up(jPanel.getGraphics());
-
+        jPanel.bg(jPanel.getGraphics());
         jPanel.addMouseListener(new MouseInputListener() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -65,7 +64,11 @@ public class Main {
 
             }
         });
+
     }
+
+
+
 
 
 
