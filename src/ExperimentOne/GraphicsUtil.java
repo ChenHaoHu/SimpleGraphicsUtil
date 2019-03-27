@@ -31,9 +31,10 @@ public class GraphicsUtil {
      */
     public static void fillArcBySeedFour(int x, int y, Color newColor, Color bordColor, Graphics g, JFrame frame) throws AWTException {
 
-        // 9 和 31 是边框引起的
-        int x0 = frame.getX()+9;
-        int y0 = frame.getY()+31;
+        //获取边框和头部菜单栏 高度
+        Insets insets = frame.getInsets();
+        int x0 = frame.getX()+insets.left;
+        int y0 = frame.getY()+insets.top;
 
         Robot robot = new Robot();
         x = x + x0 ;
@@ -46,9 +47,6 @@ public class GraphicsUtil {
 
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         BufferedImage screenCapture = null;
-
-
-
 
         boolean flag = true;
 

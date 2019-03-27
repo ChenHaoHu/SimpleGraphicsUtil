@@ -178,6 +178,8 @@ public class MyJPanel extends JPanel {
         GraphicsUtil.drawLineByBresenham(340+3,290+3,340+3,290-3,g);
         GraphicsUtil.drawLineByBresenham(340+3,290+3,340+9,290+3,g);
 
+
+
         g.setColor(Color.BLACK);
         GraphicsUtil.drawLineByBresenham(389,360,431,160,g);
 
