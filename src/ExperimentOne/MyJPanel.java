@@ -1,12 +1,13 @@
 package ExperimentOne;
 
+import GraphicsUtil.GraphicsUtil;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
