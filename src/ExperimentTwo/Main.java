@@ -42,7 +42,15 @@ public class Main {
         but.setSize(100,40);
         but.setLocation(20,20);
 
+
+
+        JButton but2 = new JButton("重绘");
+        but2.setSize(100,40);
+        but2.setLocation(220,20);
+
+
         jPanel.add(but);
+        jPanel.add(but2);
 
 
         //预备的点   可以修改
@@ -61,12 +69,10 @@ public class Main {
                inputStream = new ObjectInputStream(new FileInputStream(file));
                Object o = inputStream.readObject();
                points = (int[][]) o;
-               for (int i = 0; i < points.length; i++) {
-                   if (points[i][0] == 0 && points[i][1] == 0 ){
-                        n = i;
-                        break;
-                   }
-               }
+                n = points[points.length-1][1];
+                if (n>points.length){
+                    n = 0;
+                }
 
                System.out.println(n);
 
@@ -100,6 +106,15 @@ public class Main {
                   but.setText("删除点");
                   GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.RED);
               }
+            }
+        });
+
+        but2.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                super.mouseClicked(e);
+                n=0;
+                jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
             }
         });
 
@@ -179,6 +194,7 @@ public class Main {
                 ObjectOutputStream outputStream = null;
                     try{
                         outputStream = new ObjectOutputStream(new FileOutputStream(file));
+                        points[points.length-1][1] =n;
                          outputStream.writeObject(points);
 
                     }catch (Exception e1){
