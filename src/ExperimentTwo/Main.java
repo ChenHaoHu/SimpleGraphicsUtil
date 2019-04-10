@@ -5,9 +5,11 @@ import GraphicsUtil.GraphicsUtil;
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Properties;
 
 /**
  * @Auther: 简单DI年华
@@ -19,15 +21,17 @@ public class Main {
 
 
     static int n = 0;
+    static int[][]  points = new int[50][2];
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args)  {
         JFrame frame = new JFrame("画图板");
         frame.setBackground(Color.WHITE);
         frame.setSize(1000,550);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         int x = (int)(toolkit.getScreenSize().getWidth()-frame.getWidth())/2;
         int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //添加了监听事件
+        //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLocation(x, y);
         MyJPanel jPanel = new MyJPanel(frame);
@@ -40,10 +44,50 @@ public class Main {
 
         jPanel.add(but);
 
-        int[][]  points = new int[50][2];
+
         //预备的点   可以修改
         int power = 10;  //标记的粗度
         int step = 50;   //步长
+
+
+        File file = new File("Point.obj");
+        ObjectInputStream inputStream = null;
+
+
+
+
+        if (file.exists()){
+           try{
+               inputStream = new ObjectInputStream(new FileInputStream(file));
+               Object o = inputStream.readObject();
+               points = (int[][]) o;
+               for (int i = 0; i < points.length; i++) {
+                   if (points[i][0] == 0 && points[i][1] == 0 ){
+                        n = i;
+                        break;
+                   }
+               }
+
+               System.out.println(n);
+
+               jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+
+           }catch (Exception e){
+               System.out.println(e.fillInStackTrace());
+           }finally {
+               try {
+                   inputStream.close();
+               } catch (IOException e) {
+                   e.printStackTrace();
+               }
+           }
+        }else{
+            System.out.println("没有序列化");
+        }
+
+
+
+
 
         but.addMouseListener(new MouseAdapter() {
             @Override
@@ -55,9 +99,7 @@ public class Main {
               }else{
                   but.setText("删除点");
                   GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.RED);
-
               }
-
             }
         });
 
@@ -123,6 +165,37 @@ public class Main {
 
 
         });
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                File file = new File("Point.obj");
+
+                if (file.exists()){
+                    file.delete();
+                }
+
+                ObjectOutputStream outputStream = null;
+                    try{
+                        outputStream = new ObjectOutputStream(new FileOutputStream(file));
+                         outputStream.writeObject(points);
+
+                    }catch (Exception e1){
+                        System.out.println("序列化失败");
+                        System.out.println(e1.fillInStackTrace());
+                    }finally {
+                        try {
+                            outputStream.close();
+                        } catch (IOException e2) {
+                            e2.printStackTrace();
+                        }
+                    }
+
+                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            }
+        });
+
 
     }
 
