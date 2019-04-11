@@ -1,14 +1,18 @@
 package ExperimentTwo;
 
 import GraphicsUtil.GraphicsUtil;
+import jdk.nashorn.internal.scripts.JS;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import javax.swing.event.MouseInputListener;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.Properties;
 
 /**
@@ -22,6 +26,10 @@ public class Main {
 
     static int n = 0;
     static int[][]  points = new int[50][2];
+    //预备的点   可以修改
+    static int power = 10;  //标记的粗度
+    static int step = 50;   //步长
+
 
     public static void main(String[] args)  {
         JFrame frame = new JFrame("画图板");
@@ -49,19 +57,49 @@ public class Main {
         but2.setLocation(220,20);
 
 
+
+
+
         jPanel.add(but);
         jPanel.add(but2);
 
+        JLabel jabel = new JLabel("Step大小:");
 
-        //预备的点   可以修改
-        int power = 10;  //标记的粗度
-        int step = 50;   //步长
+        jabel.setLocation(390,20);
+        jabel.setSize(100,40);
+
+        jPanel.add(jabel);
+
+        JSlider stepSlider = new JSlider();
+        stepSlider.setMaximum(1000);
+        stepSlider.setMinimum(0);
+        stepSlider.setValue(500);
+        stepSlider.setOrientation(SwingConstants.HORIZONTAL);
+        stepSlider.setMajorTickSpacing(100);
+        stepSlider.setPaintLabels(true);
+        stepSlider.setSize(300,40);
+        stepSlider.setLocation(500,20);
+        jPanel.add(stepSlider);
+
+
+
+
+
+
+
+        stepSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                JSlider  s = (JSlider)e.getSource();
+                step = s.getValue();
+                jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+            }
+        });
 
 
         File file = new File("Point.obj");
         ObjectInputStream inputStream = null;
-
-
 
 
         if (file.exists()){
@@ -114,6 +152,7 @@ public class Main {
             public void mouseClicked(MouseEvent e) {
                 super.mouseClicked(e);
                 n=0;
+                but.setText("删除点");
                 jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
             }
         });
@@ -124,9 +163,11 @@ public class Main {
             public void mouseClicked(MouseEvent e) {
                 System.out.println(e.getX());
                 System.out.println(e.getY());
-                points[n][0] = e.getX();
-                points[n++][1] = e.getY();
-                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+                if (e.getY() > 60){
+                    points[n][0] = e.getX();
+                    points[n++][1] = e.getY();
+                    jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+                }
             }
 
             @Override
@@ -168,14 +209,17 @@ public class Main {
                 int x = e.getX();
                 int y = e.getY();
 
-                for (int i = 0; i < points.length; i++) {
-                    if (x > points[i][0]-power && x < points[i][0]+power && y < points[i][1]+power && y > points[i][1]-power){
-                        points[i][0] = e.getX();
-                        points[i][1] = e.getY();
-                        jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
-                        jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+                if(y > 60){
+                    for (int i = 0; i < points.length; i++) {
+                        if (x > points[i][0]-power && x < points[i][0]+power && y < points[i][1]+power && y > points[i][1]-power){
+                            points[i][0] = e.getX();
+                            points[i][1] = e.getY();
+                            jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
+                            jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+                        }
                     }
                 }
+
             }
 
 
