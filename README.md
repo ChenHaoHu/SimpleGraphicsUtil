@@ -13,16 +13,16 @@
 * 优化填充算法，替换robot `getPixelColor`方法耗时
 * 完成图像制作 -- 可爱的大白
 * 添加画曲线代码，并可以自定义玩耍
-* 画曲线图形持久化
+* 画曲线图形持久化、添加重绘和步长选项
 
 
 
 **目录**
 
-* [直线](Line.md)
-* [圆](Circle.md)
-* [填充](Full.md)
-* [曲线](Curve.md)
+* [直线](md/Line.md)
+* [圆](md/Circle.md)
+* [填充](md/Fill.md)
+* [曲线](md/Curve.md)
 
 
 
