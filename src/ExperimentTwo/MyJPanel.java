@@ -28,11 +28,13 @@ public class MyJPanel extends JPanel {
 
     }
 
-    public void doMyPaint(int[][] points,int step,int n,Graphics g,int power) {
+    public void doMyPaint(int[][] points,int step,int n,Graphics g,int power,int type) {
 
         GraphicsUtil.drawPoints(points,g,power, n,Color.red);
-        for (int i = 0; i < n-3; i++) {
-            GraphicsUtil.drawB_Spline3(points,i,step,g);
+        if (type == 1){
+            GraphicsUtil.drawBezier(points,n,step,g);
+        }else{
+            GraphicsUtil.drawB_Spline(points,n,step,g);
         }
 
     }

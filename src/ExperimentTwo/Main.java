@@ -29,9 +29,11 @@ public class Main {
     //预备的点   可以修改
     static int power = 10;  //标记的粗度
     static int step = 50;   //步长
+    static int type = 2;
 
 
     public static void main(String[] args)  {
+
         JFrame frame = new JFrame("画图板");
         frame.setBackground(Color.WHITE);
         frame.setSize(1000,550);
@@ -83,6 +85,30 @@ public class Main {
 
 
 
+        JComboBox<String> box = new JComboBox<>();
+
+        box.addItem("Bezier曲线曲线");
+        box.addItem("B 样条曲线");
+
+
+        box.setSize(100,40);
+        box.setLocation(900,20);
+        jPanel.add(box);
+
+
+        box.addItemListener(e -> {
+           String item  = (String) e.getItem();
+
+           if ("Bezier曲线曲线".equals(item)){
+               type = 1;
+           }else{
+               type = 0;
+           }
+            jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
+            jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+
+
+        });
 
 
 
@@ -93,7 +119,7 @@ public class Main {
                 JSlider  s = (JSlider)e.getSource();
                 step = s.getValue();
                 jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
-                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
             }
         });
 
@@ -114,7 +140,7 @@ public class Main {
 
                System.out.println(n);
 
-               jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+               jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
 
            }catch (Exception e){
                System.out.println(e.fillInStackTrace());
@@ -166,7 +192,7 @@ public class Main {
                 if (e.getY() > 60){
                     points[n][0] = e.getX();
                     points[n++][1] = e.getY();
-                    jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+                    jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
                 }
             }
 
@@ -215,7 +241,7 @@ public class Main {
                             points[i][0] = e.getX();
                             points[i][1] = e.getY();
                             jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
-                            jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power);
+                            jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
                         }
                     }
                 }
