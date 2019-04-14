@@ -30,10 +30,12 @@ public class MyJPanel extends JPanel {
 
     public void doMyPaint(int[][] points,int step,int n,Graphics g,int power,int type) {
 
-        GraphicsUtil.drawPoints(points,g,power, n,Color.red);
+        GraphicsUtil.drawPoints(points,g,power, n,Color.RED);
         if (type == 1){
+            g.setColor(Color.BLACK);
             GraphicsUtil.drawBezier(points,n,step,g);
         }else{
+            g.setColor(Color.BLUE);
             GraphicsUtil.drawB_Spline(points,n,step,g);
         }
 

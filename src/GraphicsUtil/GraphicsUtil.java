@@ -95,6 +95,7 @@ public class GraphicsUtil {
                 y0 = y;
                 x = (int)(a0 * points[n][0] + a1 * points[n+1][0] + a2 * points[n+2][0] + a3 * points[n+3][0]);
                 y = (int)(a0 * points[n][1] + a1 * points[n+1][1] + a2 * points[n+2][1] + a3 * points[n+3][1]);
+
                 drawLineByBresenham(x0,y0,x,y,g);
             }
 

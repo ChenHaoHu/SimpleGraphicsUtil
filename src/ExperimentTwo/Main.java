@@ -1,12 +1,12 @@
 package ExperimentTwo;
 
 import GraphicsUtil.GraphicsUtil;
+import jdk.nashorn.internal.scripts.JO;
 import jdk.nashorn.internal.scripts.JS;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.event.MouseInputListener;
+import javax.swing.event.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
@@ -23,18 +23,20 @@ import java.util.Properties;
  */
 public class Main {
 
-
+    static JFrame frame = null;
+    static MyJPanel jPanel = null;
     static int n = 0;
-    static int[][]  points = new int[50][2];
+    static int[][]  points = new int[300][2];
     //预备的点   可以修改
     static int power = 10;  //标记的粗度
     static int step = 50;   //步长
     static int type = 2;
+    static String openFilePath = null;
 
 
     public static void main(String[] args)  {
 
-        JFrame frame = new JFrame("画图板");
+        frame = new JFrame("画图板");
         frame.setBackground(Color.WHITE);
         frame.setSize(1200,550);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -44,156 +46,70 @@ public class Main {
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
         frame.setLocation(x, y);
-        MyJPanel jPanel = new MyJPanel(frame);
+        jPanel = new MyJPanel(frame);
         jPanel.setBackground(new Color(249, 231, 255, 0));
         frame.add(jPanel);
         jPanel.setLayout(null);
-        JButton but = new JButton("删除点");
-        but.setSize(100,40);
-        but.setLocation(20,20);
 
+        JMenuBar bar = new JMenuBar();
+        JMenu jMenu1 = new JMenu("File");
+        JMenuItem jMenu1_item1 = new JMenuItem("Import");
+        JMenuItem jMenu1_item2 = new JMenuItem("Export");
+        JMenuItem jMenu1_item3 = new JMenuItem("Save");
 
+        jMenu1.add(jMenu1_item1);
+        jMenu1.add(jMenu1_item2);
+        jMenu1.add(jMenu1_item3);
+        JMenu jMenu2 = new JMenu("Point");
+        JMenuItem jMenu2_item1 = new JMenuItem("Delete");
+        JMenuItem jMenu2_item2 = new JMenuItem("Show");
+        jMenu2.add(jMenu2_item1);
+        jMenu2.add(jMenu2_item2);
+        JMenu jMenu3 = new JMenu("Repaint");
+        JMenuItem jMenu3_item1 = new JMenuItem("Go");
+        JMenuItem jMenu3_item2 = new JMenuItem("Kong");
+        jMenu3.add(jMenu3_item1);
+        jMenu3.add(jMenu3_item2);
+        JMenu jMenu4 = new JMenu("Algorithm");
+        JMenuItem jMenu4_item1 = new JMenuItem("Bezier");
+        JMenuItem jMenu4_item2 = new JMenuItem("B_Spline");
+        jMenu4.add(jMenu4_item1);
+        jMenu4.add(jMenu4_item2);
+        JMenu jMenu5 = new JMenu("Steps");
 
-        JButton but2 = new JButton("重绘");
-        but2.setSize(100,40);
-        but2.setLocation(220,20);
-
-
-
-
-
-        jPanel.add(but);
-        jPanel.add(but2);
-
-        JLabel jabel = new JLabel("Step大小:");
-
-        jabel.setLocation(390,20);
-        jabel.setSize(100,40);
-
-        jPanel.add(jabel);
-
-        JSlider stepSlider = new JSlider();
-        stepSlider.setMaximum(1000);
-        stepSlider.setMinimum(0);
-        stepSlider.setValue(500);
-        stepSlider.setOrientation(SwingConstants.HORIZONTAL);
-        stepSlider.setMajorTickSpacing(100);
-        stepSlider.setPaintLabels(true);
-        stepSlider.setSize(300,40);
-        stepSlider.setLocation(500,20);
-        jPanel.add(stepSlider);
-
-
-
-        JComboBox<String> box = new JComboBox<>();
-
-        box.addItem("Bezier曲线曲线");
-        box.addItem("B 样条曲线");
-
-
-        box.setSize(100,40);
-        box.setLocation(900,20);
-        jPanel.add(box);
-
-
-        box.addItemListener(e -> {
-           String item  = (String) e.getItem();
-
-           if ("Bezier曲线曲线".equals(item)){
-               type = 1;
-           }else{
-               type = 0;
-           }
-            jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
-            jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
-
-
-        });
-
-
-
-
-        stepSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                JSlider  s = (JSlider)e.getSource();
-                step = s.getValue();
-                jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
-                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
-            }
-        });
-
-
-        File file = new File("Point.obj");
-        ObjectInputStream inputStream = null;
-
-
-        if (file.exists()){
-           try{
-               inputStream = new ObjectInputStream(new FileInputStream(file));
-               Object o = inputStream.readObject();
-               points = (int[][]) o;
-                n = points[points.length-1][1];
-                if (n>points.length){
-                    n = 0;
-                }
-
-               System.out.println(n);
-
-               jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
-
-           }catch (Exception e){
-               System.out.println(e.fillInStackTrace());
-           }finally {
-               try {
-                   inputStream.close();
-               } catch (IOException e) {
-                   e.printStackTrace();
-               }
-           }
-        }else{
-            System.out.println("没有序列化");
+        for (int i = 0; i < 1000; i = i + 100) {
+            jMenu5.add(new JMenuItem((i)+""));
         }
 
 
+        bar.add(jMenu1);
+        bar.add(jMenu2);
+        bar.add(jMenu3);
+        bar.add(jMenu4);
+        bar.add(jMenu5);
+
+
+        frame.setJMenuBar(bar);
+
+
+        setMenuListen(jMenu1,jMenu2,jMenu3,jMenu4,jMenu5);
 
 
 
-        but.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-              if (but.getText().equals("删除点")){
-                  but.setText("显示点");
-                  GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.WHITE);
-              }else{
-                  but.setText("删除点");
-                  GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.RED);
-              }
-            }
-        });
 
-        but2.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                super.mouseClicked(e);
-                n=0;
-                but.setText("删除点");
-                jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
-            }
-        });
+        File file = new File("Point.obj");
+
+        readObjFile(file);
 
 
         jPanel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                System.out.println(e.getX());
-                System.out.println(e.getY());
-                if (e.getY() > 60){
-                    points[n][0] = e.getX();
-                    points[n++][1] = e.getY();
-                    jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
-                }
+                System.out.println("x == "+  e.getX() + "  y == "+e.getY());
+
+                points[n][0] = e.getX();
+                points[n++][1] = e.getY();
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
             }
 
             @Override
@@ -234,15 +150,12 @@ public class Main {
                 super.mouseDragged(e);
                 int x = e.getX();
                 int y = e.getY();
-
-                if(y > 60){
-                    for (int i = 0; i < points.length; i++) {
-                        if (x > points[i][0]-power && x < points[i][0]+power && y < points[i][1]+power && y > points[i][1]-power){
-                            points[i][0] = e.getX();
-                            points[i][1] = e.getY();
-                            jPanel.getGraphics().clearRect(60,60,jPanel.getWidth(),jPanel.getHeight());
-                            jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
-                        }
+                for (int i = 0; i < points.length; i++) {
+                    if (x > points[i][0]-power && x < points[i][0]+power && y < points[i][1]+power && y > points[i][1]-power){
+                        points[i][0] = e.getX();
+                        points[i][1] = e.getY();
+                        jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
+                        jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
                     }
                 }
 
@@ -255,36 +168,247 @@ public class Main {
             @Override
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
-                File file = new File("Point.obj");
 
-                if (file.exists()){
-                    file.delete();
+                int a = JOptionPane.showConfirmDialog(jPanel, "是否保存？");
+
+                if (a == 0){
+                    JFileChooser jFileChooser = new JFileChooser();
+
+
+                    jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+                    int i = jFileChooser.showOpenDialog(jPanel);
+
+                    if (i == JFileChooser.APPROVE_OPTION){
+
+                        String path = jFileChooser.getSelectedFile().getAbsolutePath();
+
+                        String fileName = JOptionPane.showInputDialog("input file name:");
+                        if (fileName != null){
+                            saveObjFile(path+File.separator+fileName+".obj");
+                            JOptionPane.showMessageDialog(null,"export ok");
+                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        }else{
+                            JOptionPane.showMessageDialog(null,"export fail");
+                        }
+
+                    }
+                }else if(a == 2){
+                    System.out.println(a);
+                    frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+                }else{
+                    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                 }
 
-                ObjectOutputStream outputStream = null;
-                    try{
-                        outputStream = new ObjectOutputStream(new FileOutputStream(file));
-                        points[points.length-1][1] =n;
-                         outputStream.writeObject(points);
 
-                    }catch (Exception e1){
-                        System.out.println("序列化失败");
-                        System.out.println(e1.fillInStackTrace());
-                    }finally {
-                        try {
-                            outputStream.close();
-                        } catch (IOException e2) {
-                            e2.printStackTrace();
-                        }
-                    }
-
-                frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
             }
         });
 
 
     }
 
+    private static void saveObjFile(String objFileName) {
+
+        File file = new File(objFileName);
+
+        if (file.exists()){
+            file.delete();
+        }
+
+        ObjectOutputStream outputStream = null;
+        try{
+            outputStream = new ObjectOutputStream(new FileOutputStream(file));
+            points[points.length-1][1] =n;
+            outputStream.writeObject(points);
+
+        }catch (Exception e1){
+            System.out.println("序列化失败");
+            System.out.println(e1.fillInStackTrace());
+        }finally {
+            try {
+                outputStream.close();
+            } catch (IOException e2) {
+                e2.printStackTrace();
+            }
+        }
+    }
+
+    private static void readObjFile(File file) {
+
+        ObjectInputStream inputStream = null;
+
+        if (file.exists()){
+            try{
+                inputStream = new ObjectInputStream(new FileInputStream(file));
+                Object o = inputStream.readObject();
+                points = (int[][]) o;
+                n = points[points.length-1][1];
+                if (n>points.length){
+                    n = 0;
+                }
+
+                System.out.println(n);
+
+                jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+
+                openFilePath = file.getAbsolutePath();
+
+                frame.setTitle(file.getName());
+
+
+            }catch (Exception e){
+                System.out.println(e.fillInStackTrace());
+            }finally {
+                try {
+                    inputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }else{
+            System.out.println("没有序列化");
+        }
+
+
+
+    }
+
+    private static void setMenuListen(JMenu jMenu1, JMenu jMenu2, JMenu jMenu3, JMenu jMenu4, JMenu jMenu5) {
+
+
+        //delete point
+        jMenu2.getItem(0).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.WHITE);
+            }
+        });
+        //show point
+        jMenu2.getItem(1).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.RED);
+            }
+        });
+        //save
+        jMenu1.getItem(2).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveObjFile(openFilePath);
+                JOptionPane.showMessageDialog(jPanel,"save ok");
+            }
+        });
+        //repaint
+        jMenu3.getItem(0).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                n=0;
+                jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
+            }
+        });
+
+        //import
+        jMenu1.getItem(0).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                JFileChooser jFileChooser = new JFileChooser();
+
+                jFileChooser.setFileFilter(new FileNameExtensionFilter("obj & OBJ","obj","OBJ"));
+
+                int i = jFileChooser.showOpenDialog(jPanel);
+                if (i == JFileChooser.APPROVE_OPTION){
+                    String path = jFileChooser.getSelectedFile().getAbsolutePath();
+                    System.out.println(path);
+                    readObjFile(new File(path));
+                }
+            }
+        });
+
+        //export
+        jMenu1.getItem(1).addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+
+
+                JFileChooser jFileChooser = new JFileChooser();
+
+
+                jFileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+                int i = jFileChooser.showOpenDialog(jPanel);
+
+                if (i == JFileChooser.APPROVE_OPTION){
+
+                    String path = jFileChooser.getSelectedFile().getAbsolutePath();
+
+                    String fileName = JOptionPane.showInputDialog("input file name:");
+                    if (fileName != null){
+                        saveObjFile(path+File.separator+fileName+".obj");
+                        JOptionPane.showMessageDialog(null,"export ok");
+                    }
+
+                }
+            }
+        });
+
+
+
+        //Bezier
+        jMenu4.getItem(0).addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                type = 1;
+                jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+
+            }
+        });
+
+        //B_Spline
+        jMenu4.getItem(1).addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                type = 0;
+                jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+
+            }
+        });
+
+
+        //steps
+        for (int i = 0; i < 10; i++) {
+            jMenu5.getItem(i).addActionListener(new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    JMenuItem source = (JMenuItem) e.getSource();
+                    String text = source.getText();
+
+                   try {
+                        step = Integer.valueOf(text);
+                   }catch (Exception e1){
+                       System.out.println(text+ " to int fail");
+                   }
+
+
+                    jPanel.getGraphics().clearRect(0, 0, jPanel.getWidth(), jPanel.getHeight());
+                    jPanel.doMyPaint(points, step, n, jPanel.getGraphics(), power, type);
+
+                }
+            });
+        }
+
+    }
 
 
 }
