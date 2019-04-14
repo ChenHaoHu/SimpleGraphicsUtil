@@ -36,7 +36,7 @@ public class Main {
 
         JFrame frame = new JFrame("画图板");
         frame.setBackground(Color.WHITE);
-        frame.setSize(1000,550);
+        frame.setSize(1200,550);
         Toolkit toolkit = Toolkit.getDefaultToolkit();
         int x = (int)(toolkit.getScreenSize().getWidth()-frame.getWidth())/2;
         int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
