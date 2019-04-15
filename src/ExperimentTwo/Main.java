@@ -44,7 +44,7 @@ public class Main {
         int y = (int)(toolkit.getScreenSize().getHeight()-frame.getHeight())/2;
         //添加了监听事件
         //frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+
         frame.setLocation(x, y);
         jPanel = new MyJPanel(frame);
         jPanel.setBackground(new Color(249, 231, 255, 0));
@@ -94,7 +94,7 @@ public class Main {
 
         setMenuListen(jMenu1,jMenu2,jMenu3,jMenu4,jMenu5);
 
-
+        frame.setVisible(true);
 
 
         File file = new File("Point.obj");
