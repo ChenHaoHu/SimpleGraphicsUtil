@@ -28,9 +28,14 @@ public class MyJPanel extends JPanel {
 
     }
 
-    public void doMyPaint(int[][] points,int step,int n,Graphics g,int power,int type) {
+    public void doMyPaint(int[][] points,int step,int n,Graphics g,int power,int type, boolean drawPoint) {
 
-        GraphicsUtil.drawPoints(points,g,power, n,Color.RED);
+        if (drawPoint){
+            GraphicsUtil.drawPoints(points,g,power, n,Color.RED);
+        }else{
+
+        }
+
         if (type == 1){
             g.setColor(Color.BLACK);
             GraphicsUtil.drawBezier(points,n,step,g);

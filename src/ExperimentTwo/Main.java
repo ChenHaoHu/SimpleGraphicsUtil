@@ -109,7 +109,7 @@ public class Main {
 
                 points[n][0] = e.getX();
                 points[n++][1] = e.getY();
-                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type,true);
             }
 
             @Override
@@ -155,7 +155,7 @@ public class Main {
                         points[i][0] = e.getX();
                         points[i][1] = e.getY();
                         jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
-                        jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+                        jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type,true);
                     }
                 }
 
@@ -250,7 +250,7 @@ public class Main {
                 System.out.println(n);
 
                 jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
-                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type,true);
 
                 openFilePath = file.getAbsolutePath();
 
@@ -281,14 +281,16 @@ public class Main {
         jMenu2.getItem(0).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.WHITE);
+                jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type,false);
             }
         });
         //show point
         jMenu2.getItem(1).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                GraphicsUtil.drawPoints(points,jPanel.getGraphics(),power,n,Color.RED);
+                jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type,true);
             }
         });
         //save
@@ -365,7 +367,7 @@ public class Main {
 
                 type = 1;
                 jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
-                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type,true);
 
             }
         });
@@ -378,7 +380,7 @@ public class Main {
 
                 type = 0;
                 jPanel.getGraphics().clearRect(0,0,jPanel.getWidth(),jPanel.getHeight());
-                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type);
+                jPanel.doMyPaint(points,step,n,jPanel.getGraphics(),power,type,true);
 
             }
         });
@@ -402,7 +404,7 @@ public class Main {
 
 
                     jPanel.getGraphics().clearRect(0, 0, jPanel.getWidth(), jPanel.getHeight());
-                    jPanel.doMyPaint(points, step, n, jPanel.getGraphics(), power, type);
+                    jPanel.doMyPaint(points, step, n, jPanel.getGraphics(), power, type,true);
 
                 }
             });
